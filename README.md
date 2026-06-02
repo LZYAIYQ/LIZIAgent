@@ -31,15 +31,6 @@
 
 ---
 
-## Star 历史
-
-<div align="center">
-
-[![Star History Chart](https://api.star-history.com/svg?repos=LZYAIYQ/LIZIAgent&type=Date)](https://star-history.com/#LZYAIYQ/LIZIAgent&Date)
-
-</div>
-
----
 
 ## 功能
 
@@ -341,7 +332,7 @@ npm start
 | `GET /api/graph-rag` | 知识图谱 |
 | `GET /api/tools` | 工具列表 |
 
-完整 API 文档：http://localhost:8020/docs
+
 
 ---
 
@@ -468,3 +459,13 @@ LIZIAgent/
 [![GitHub forks](https://img.shields.io/github/forks/LZYAIYQ/LIZIAgent?style=social)](https://github.com/LZYAIYQ/LIZIAgent/network/members)
 
 </div>
+
+## Star 历史
+
+<div align="center">
+
+[![Star History Chart](https://api.star-history.com/svg?repos=LZYAIYQ/LIZIAgent&type=Date)](https://star-history.com/#LZYAIYQ/LIZIAgent&Date)
+
+</div>
+
+---
