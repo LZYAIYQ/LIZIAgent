@@ -2,36 +2,54 @@
 
 # 🌰 LZAgent
 
-### 栗子Agent — 你的 IM 私人助理
+### 栗子Agent — 你的 AI 私人助理 + 桌面宠物
 
 <br>
 
 ![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Electron](https://img.shields.io/badge/Electron-22+-47848F?style=for-the-badge&logo=electron&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-000000?style=for-the-badge)
 
 <br>
 
-[快速开始](#-30秒启动) · [功能展示](#-我能做什么) · [架构设计](#-架构) · [部署指南](#-部署) · [API文档](#-api)
+[快速开始](#-快速开始) · [功能](#-功能) · [桌面宠物](#-桌面宠物) · [架构](#-架构) · [TODO](#-todo)
 
 </div>
 
 ---
 
-## 一句话
+## 项目简介
 
-> 在微信/飞书里聊天，AI 帮你搜论文、查天气、做规划、记事情——**它会记住你说过的每一件事**。
+**LZAgent** 是一个全栈 AI 助理系统，包含：
+
+1. **🧠 AI 后端** — 基于 LLM 的智能对话引擎，支持长期记忆、知识图谱、技能系统
+2. **🌰 桌面宠物** — Electron 桌面宠物，可拖拽、可对话、可互动
+
+在微信/飞书里聊天，AI 帮你搜论文、查天气、做规划、记事情——**它会记住你说过的每一件事**。
 
 ---
 
-## 我能做什么
+## Star 历史
+
+<div align="center">
+
+[![Star History Chart](https://api.star-history.com/svg?repos=LZYAIYQ/LIZIAgent&type=Date)](https://star-history.com/#LZYAIYQ/LIZIAgent&Date)
+
+</div>
+
+---
+
+## 功能
+
+### 🤖 AI 助理能力
 
 <table>
 <tr>
 <td width="50%">
 
-### 📚 学术研究
+**📚 学术研究**
 ```
 你: 找几篇 transformer 的最新论文
 AI: [搜索 Google Scholar / arxiv]
@@ -45,7 +63,7 @@ AI: [提取论文] 这篇主要讲...
 </td>
 <td width="50%">
 
-### 🧠 长期记忆
+**🧠 长期记忆**
 ```
 你: 我老婆叫小明，生日 6.15
 AI: 好，已记下。
@@ -60,7 +78,7 @@ AI: 6月15日是小明生日，
 <tr>
 <td>
 
-### 🗺️ 旅行规划
+**🗺️ 旅行规划**
 ```
 你: 下周五去成都三天，预算 3000
 AI: [查 12306 余票]
@@ -72,7 +90,7 @@ AI: [查 12306 余票]
 </td>
 <td>
 
-### ⏰ 定时任务
+**⏰ 定时任务**
 ```
 你: 每天 8 点推送 AI 论文
 AI: 已创建定时任务。
@@ -83,63 +101,61 @@ AI: 已创建定时任务。
 
 </td>
 </tr>
-<tr>
-<td>
-
-### 🔧 工具扩展
-```
-你: 我需要查股票的工具
-AI: 找到 stock-mcp，装吗？
-你: 好的
-AI: 已安装！查贵州茅台：1856 ↑2.3%
-```
-
-</td>
-<td>
-
-### 📄 文件处理
-```
-你: [发送 PDF]
-    帮我看看这个 PDF
-AI: [自动提取文字]
-    这篇论文主要讲...
-    需要总结要点吗？
-```
-
-</td>
-</tr>
 </table>
+
+### 🌰 桌面宠物
+
+- **可爱形象**：CSS 绘制的栗子宠物，支持自定义精灵图
+- **拖拽移动**：左键拖拽宠物到任意位置
+- **点击对话**：左键点击打开聊天面板
+- **右键菜单**：对话、隐藏、退出
+- **系统托盘**：最小化到托盘，双击恢复
+- **状态动画**：闲置、思考、拖拽、对话四种状态
 
 ---
 
-## 30秒启动
+## 快速开始
+
+### 1. 克隆项目
 
 ```bash
-# 1. 克隆
 git clone https://github.com/LZYAIYQ/LIZIAgent.git
 cd LIZIAgent
+```
 
-# 2. 配置（只需填 LLM key）
+### 2. 启动 AI 后端
+
+```bash
+# 配置
 cp .env.example .env
 # 编辑 .env，填入 OPENAI_API_KEY
 
-# 3. 启动
+# Docker 启动
 docker compose up -d --build
 
-# 4. 验证
+# 验证
 curl http://localhost:8020/api/health
-# → {"status":"ok","app":"LZAgent"}
 ```
 
-### 接入微信
+### 3. 启动桌面宠物
 
+```bash
+cd desktop-pet2
+npm install
+npm start
+```
+
+或直接双击 `start.bat`。
+
+### 4. 接入 IM
+
+**微信**：
 ```bash
 docker compose run --rm weixin-login
 # 扫码 → 微信里直接聊天
 ```
 
-### 接入飞书
-
+**飞书**：
 ```env
 # .env 中添加
 FEISHU_APP_ID=cli_xxxx
@@ -148,10 +164,55 @@ FEISHU_APP_SECRET=xxxx
 
 ```bash
 docker compose restart lzagent
-# 飞书里搜索机器人 → 发消息
 ```
 
-> 飞书用 WebSocket 长连接，**无需公网 IP**。
+---
+
+## 桌面宠物
+
+### 界面
+
+```
+┌─────────────────────┐
+│      💭 气泡        │  ← 思考时显示
+│   "嗯，在想..."     │
+├─────────────────────┤
+│                     │
+│    🌰 栗子宠物      │  ← CSS 绘制 / 自定义精灵
+│                     │
+├─────────────────────┤
+│   👀 眼睛会动       │
+│   😊 有表情         │
+└─────────────────────┘
+```
+
+### 交互方式
+
+| 操作 | 效果 |
+|:---|:---|
+| 鼠标悬停 | 宠物进入思考状态 |
+| 左键点击 | 打开聊天面板 |
+| 左键拖拽 | 移动宠物位置 |
+| 右键菜单 | 对话 / 隐藏 / 退出 |
+| 双击托盘图标 | 恢复显示 |
+
+### 自定义精灵
+
+编辑 `renderer/assets/sprites/config.json`：
+
+```json
+{
+  "useSprite": true,
+  "states": {
+    "idle": { "image": "idle.png" },
+    "thinking": { "image": "thinking.png" },
+    "dragging": { "image": "dragging.png" },
+    "chatting": { "image": "chatting.png" }
+  }
+}
+```
+
+将精灵图放入 `renderer/assets/sprites/` 目录。
 
 ---
 
@@ -160,7 +221,7 @@ docker compose restart lzagent
 ```
 ┌─────────────────────────────────────────────────────┐
 │                     用户层                           │
-│         微信 / 飞书 / Webhook / 任意 IM              │
+│    微信 / 飞书 / 桌面宠物 / Webhook / 任意 IM        │
 └──────────────────────┬──────────────────────────────┘
                        │
 ┌──────────────────────▼──────────────────────────────┐
@@ -239,38 +300,6 @@ Agent: 已记录。（异步抽取知识图谱）
 
 ---
 
-## 知识图谱
-
-从对话中自动抽取结构化知识：
-
-```
-[用户] --prefers--> [高铁]
-[用户] --about--> [项目 X]
-[项目 X] --deadline--> [6月30日]
-[张三] --负责--> [项目 X]
-```
-
-- 异步抽取，不阻塞对话
-- 按知识库隔离
-- 支持可视化查询
-
----
-
-## MCP 扩展
-
-一行命令安装新工具：
-
-```
-你: 我需要一个查天气的工具
-AI: 找到 weather-mcp，安装吗？
-你: 好的
-AI: 已安装！
-```
-
-支持：`npm` · `pip` · `uvx` · `git+`
-
----
-
 ## 部署
 
 ### Docker（推荐）
@@ -288,8 +317,14 @@ docker compose up -d --build
 ### 本地开发
 
 ```bash
+# AI 后端
 pip install -r requirements.txt
 uvicorn backend.app:app --host 0.0.0.0 --port 8020
+
+# 桌面宠物
+cd desktop-pet2
+npm install
+npm start
 ```
 
 ---
@@ -334,20 +369,29 @@ LZAGENT_SCHOLAR_PROXY=...   # 代理地址
 ## 项目结构
 
 ```
-LZAgent/
-├── backend/
-│   ├── agent/          # Agent 核心
-│   ├── api/            # REST API
-│   ├── gateways/       # IM 网关
-│   ├── memory/         # 记忆系统
-│   ├── skills/         # 技能系统
-│   ├── tools/          # 工具系统
-│   ├── mcp/            # MCP 扩展
-│   ├── graph/          # 知识图谱
-│   └── core/           # 配置
+LIZIAgent/
+├── backend/                # AI 后端
+│   ├── agent/              # Agent 核心
+│   ├── api/                # REST API
+│   ├── gateways/           # IM 网关
+│   ├── memory/             # 记忆系统
+│   ├── skills/             # 技能系统
+│   ├── tools/              # 工具系统
+│   ├── mcp/                # MCP 扩展
+│   ├── graph/              # 知识图谱
+│   └── core/               # 配置
+├── desktop-pet2/           # 桌面宠物
+│   ├── main.js             # Electron 主进程
+│   ├── preload.js          # 预加载脚本
+│   ├── renderer/           # 渲染进程
+│   │   ├── index.html      # 界面
+│   │   ├── app.js          # 交互逻辑
+│   │   ├── style.css       # 样式
+│   │   └── assets/         # 资源文件
+│   └── package.json
 ├── workspace/
-│   ├── skills/         # 技能文件
-│   └── knowledge/      # 知识库
+│   ├── skills/             # 技能文件
+│   └── knowledge/          # 知识库
 ├── docker-compose.yml
 └── Dockerfile
 ```
@@ -358,14 +402,29 @@ LZAgent/
 
 | 组件 | 技术 |
 |:---|:---|
-| Web 框架 | FastAPI |
+| AI 后端 | FastAPI + PostgreSQL + Neo4j + Redis |
 | LLM | OpenAI 兼容（DeepSeek / Qwen / GPT） |
-| 数据库 | PostgreSQL + pgvector |
-| 图数据库 | Neo4j |
-| 缓存 | Redis |
+| 桌面宠物 | Electron + HTML/CSS/JS |
 | 工具协议 | MCP |
 | 微信接入 | iLink Bot 协议 |
 | 飞书接入 | lark-oapi（WebSocket） |
+
+---
+
+## TODO
+
+- [ ] 🎨 桌面宠物支持更多精灵动画
+- [ ] 🎤 语音输入支持（Whisper 集成）
+- [ ] 📱 移动端 App（React Native）
+- [ ] 🔌 更多 MCP 工具集成
+- [ ] 🌍 多语言支持（英文、日文）
+- [ ] 📊 数据可视化仪表盘
+- [ ] 🔐 OAuth 登录支持
+- [ ] 📦 插件市场
+- [ ] 🤖 多 Agent 协作
+- [ ] 📝 文档自动生成
+- [ ] 🧪 单元测试覆盖率提升
+- [ ] 🚀 CI/CD 自动化部署
 
 ---
 
@@ -377,6 +436,7 @@ LZAgent/
 - 日常任务（天气、新闻、提醒）
 - 项目管理（记忆截止日、跟进进度）
 - 旅行规划
+- 桌面互动娱乐
 
 **不适合**：
 - 高频交易系统
@@ -396,11 +456,15 @@ LZAgent/
 - [Hermes Agent](https://github.com/NousResearch/hermes-agent) — 记忆系统设计
 - [OpenClaw](https://github.com/steipete/openclaw) — 工具权限模型
 - [llm-wiki](https://github.com/nvk/llm-wiki) — 知识沉淀机制
+- [Electron](https://www.electronjs.org/) — 桌面应用框架
 
 ---
 
 <div align="center">
 
 **🌰 LZAgent** — 让 AI 成为你的私人助理
+
+[![GitHub stars](https://img.shields.io/github/stars/LZYAIYQ/LIZIAgent?style=social)](https://github.com/LZYAIYQ/LIZIAgent/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/LZYAIYQ/LIZIAgent?style=social)](https://github.com/LZYAIYQ/LIZIAgent/network/members)
 
 </div>
