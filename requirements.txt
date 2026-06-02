@@ -1,0 +1,31 @@
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+sqlalchemy>=2.0.36
+pydantic>=2.10.0
+pydantic-settings>=2.7.0
+loguru>=0.7.3
+python-dotenv>=1.0.1
+httpx>=0.28.0
+croniter>=5.0.0
+PyYAML>=6.0
+# Personal WeChat (Weixin) via Tencent iLink
+aiohttp>=3.10.0
+cryptography>=43.0.0
+certifi>=2024.8.30
+qrcode>=7.4.2
+# MCP (Model Context Protocol) client
+mcp>=1.0.0
+# Redis
+redis>=5.0.0
+# Google Scholar search
+scholarly>=1.7.0
+# PDF text extraction
+pypdf>=4.0.0
+# Smoke + unit test fake for redis
+fakeredis[lua]>=2.24.0
+# yt-dlp
+yt-dlp>=2024.10.7
+# WebSocket support for Feishu long-connection
+websockets>=12.0
+# Feishu/Lark SDK (long-connection gateway)
+lark-oapi>=1.4.0

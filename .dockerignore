@@ -1,0 +1,31 @@
+.git
+.github
+.gitignore
+.venv
+venv
+__pycache__
+*.py[cod]
+*.egg-info
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+
+# Do not ship local runtime data into the image
+data/
+config/local.yaml
+workspace/files/
+workspace/logs/
+workspace/memory/
+workspace/skills/.usage.json
+workspace/.lzagent/
+
+# Logs / DB
+*.log
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Docs are not needed inside the container
+docs/

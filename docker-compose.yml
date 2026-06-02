@@ -1,0 +1,159 @@
+name: lzagent
+
+services:
+  lzagent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-}
+        APT_MIRROR_URL: ${APT_MIRROR_URL:-}
+    image: lzagent:local
+    container_name: lzagent
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      neo4j:
+        condition: service_healthy
+    environment:
+      LZAGENT_HOST: 0.0.0.0
+      LZAGENT_PORT: 8020
+      LZAGENT_LOG_LEVEL: ${LZAGENT_LOG_LEVEL:-INFO}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.openai.com/v1}
+      OPENAI_MODEL: ${OPENAI_MODEL:-}
+      NPM_CONFIG_REGISTRY: ${NPM_CONFIG_REGISTRY:-}
+      LZAGENT_REDIS_URL: ${LZAGENT_REDIS_URL:-redis://redis:6379/0}
+      LZAGENT_SEARXNG_URL: ${LZAGENT_SEARXNG_URL:-}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://lzagent:lzagent@postgres:5432/lzagent}
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USERNAME: ${NEO4J_USERNAME:-neo4j}
+      NEO4J_PASSWORD: ${NEO4J_PASSWORD:-lzagent123}
+    env_file:
+      - .env
+    ports:
+      - "8020:8020"
+    volumes:
+      - .:/app/host
+      - lzagent_data:/app/data
+      - ./config:/app/config
+      - lzagent_workspace:/app/workspace
+      - lzagent_packages:/app/.packages
+
+  # ---------------------------------------------------------------------
+  # On-demand utility: scan QR + auto-register a Weixin DeliveryTarget.
+  #
+  # Not started by `docker compose up` (gated by the ``setup`` profile).
+  # Invoke it when you need to (re-)bind a personal-WeChat identity:
+  #
+  #     docker compose run --rm weixin-login
+  #
+  # Reuses lzagent's image (no extra build) and mounts the same
+  # ``lzagent_workspace`` named volume, so saved credentials land where
+  # the running lzagent service can immediately pick them up. The CLI's
+  # auto-register step talks to the running lzagent over the compose
+  # network at http://lzagent:8020.
+  # ---------------------------------------------------------------------
+  weixin-login:
+    image: lzagent:local
+    profiles: ["setup"]
+    depends_on:
+      lzagent:
+        condition: service_started
+    environment:
+      LZAGENT_HOST: 0.0.0.0
+      LZAGENT_PORT: 8020
+    volumes:
+      - lzagent_workspace:/app/workspace
+      - lzagent_config:/app/config
+    command:
+      - python
+      - -m
+      - backend.cli.weixin_login
+      - --api-base
+      - http://lzagent:8020
+    tty: true
+    stdin_open: true
+
+  redis:
+    image: redis:7-alpine
+    container_name: lzagent-redis
+    restart: unless-stopped
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+      - --maxmemory
+      - 256mb
+      - --maxmemory-policy
+      - allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    volumes:
+      - lzagent_redis:/data
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: lzagent-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: lzagent
+      POSTGRES_USER: lzagent
+      POSTGRES_PASSWORD: lzagent
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lzagent -d lzagent"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    ports:
+      - "5432:5432"
+    volumes:
+      - lzagent_postgres:/var/lib/postgresql/data
+
+  neo4j:
+    image: neo4j:5-community
+    container_name: lzagent-neo4j
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: neo4j/lzagent123
+      NEO4J_server_memory_heap_initial__size: 512m
+      NEO4J_server_memory_heap_max__size: 512m
+      NEO4J_server_memory_pagecache_size: 512m
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:7474/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - lzagent_neo4j:/data
+
+volumes:
+  lzagent_data:
+  lzagent_config:
+  lzagent_workspace:
+  lzagent_redis:
+  lzagent_packages:
+  lzagent_postgres:
+  lzagent_neo4j:

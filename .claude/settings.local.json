@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker compose *)",
+      "Bash(curl -s http://localhost:8020/api/health)",
+      "Bash(curl -s http://localhost:8020/api/harness/health)"
+    ]
+  }
+}

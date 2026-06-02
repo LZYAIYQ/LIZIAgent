@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Runtime data (persisted via docker volumes)
+data/
+config/local.yaml
+workspace/credentials/
+workspace/files/
+workspace/logs/
+workspace/memory/
+workspace/skills/.usage.json
+workspace/.lzagent/
+
+# Stray packaging / discovery artefacts that the agent may write at runtime
+workspace/knowledge/*
+!workspace/knowledge/.gitkeep
+workspace/knowledge_modes/*
+!workspace/knowledge_modes/.gitkeep
+
+# Build / packaging
+build/
+dist/
+
+# Logs / DB
+*.log
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
